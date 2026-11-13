@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RetailIQ - Intelligent Shopping Assistant</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #222;
+        }
+
+        header {
+            background: #1f4e79;
+            color: white;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 25px;
+        }
+
+        header p {
+            font-size: 14px;
+            margin-top: 3px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 35px 20px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .hero h2 {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            color: #666;
+        }
+
+        .search-box {
+            display: flex;
+            max-width: 750px;
+            margin: 25px auto;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #bbb;
+            border-radius: 8px 0 0 8px;
+            font-size: 16px;
+        }
+
+        .search-box button {
+            padding: 15px 25px;
+            border: none;
+            background: #1f4e79;
+            color: white;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .search-box button:hover {
+            background: #163a5c;
+        }
+
+        #searchInfo {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .product-icon {
+            height: 100px;
+            background: #edf3f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 45px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .product-card h3 {
+            margin-bottom: 8px;
+        }
+
+        .category {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .price {
+            font-size: 21px;
+            font-weight: bold;
+            margin: 12px 0;
+            color: #1f4e79;
+        }
+
+        .rating {
+            color: #e67e22;
+            margin-bottom: 10px;
+        }
+
+        .product-card button {
+            width: 100%;
+            background: #1f4e79;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .detail-card {
+            background: white;
+            padding: 28px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .detail-card p {
+            margin-top: 8px;
+        }
+
+        .inventory-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: white;
+        }
+
+        .inventory-table th,
+        .inventory-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .inventory-table th {
+            background: #1f4e79;
+            color: white;
+        }
+
+        .available {
+            color: #198754;
+            font-weight: bold;
+        }
+
+        .low-stock {
+            color: #e67e22;
+            font-weight: bold;
+        }
+
+        .out-of-stock {
+            color: #c0392b;
+            font-weight: bold;
+        }
+
+        .add-cart-btn {
+            background: #198754;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin-top: 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .back-btn {
+            margin-bottom: 20px;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 6px;
+            background: #555;
+            color: white;
+            cursor: pointer;
+        }
+
+        .section-title {
+            margin-top: 32px;
+            margin-bottom: 15px;
+        }
+
+        .error {
+            text-align: center;
+            color: #b00020;
+        }
+
+        .loading {
+            text-align: center;
+            color: #555;
+        }
+
+        .empty-message {
+            padding: 20px;
+            background: white;
+            color: #666;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div>
+        <h1>RetailIQ</h1>
+        <p>Intelligent Retail Shopping Assistant</p>
+    </div>
+
+    <div>
+        Customer View
+    </div>
+
+</header>
+
+<div class="container">
+
+    <!-- HOME / PRODUCT LIST -->
+
+    <div id="homeSection">
+
+        <section class="hero">
+
+            <h2>Find the right product</h2>
+
+            <p>
+                Search naturally by product,
+                colour, purpose and price.
+            </p>
+
+            <div class="search-box">
+
+                <input
+                    id="searchInput"
+                    type="text"
+                    placeholder="Try: Black running shoes below 5k"
+                >
+
+                <button
+                    type="button"
+                    onclick="searchProducts()">
+                    Search
+                </button>
+
+            </div>
+
+            <div id="searchInfo"></div>
+
+        </section>
+
+        <div id="status"></div>
+
+        <section>
+
+            <h2 style="margin-bottom:20px;">
+                Products
+            </h2>
+
+            <div
+                id="productContainer"
+                class="products">
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <!-- PRODUCT DETAIL SCREEN -->
+
+    <section
+        id="productDetailSection"
+        style="display:none;">
+
+        <button
+            type="button"
+            class="back-btn"
+            onclick="backToProducts()">
+
+            ← Back to Products
+
+        </button>
+
+        <div id="detailStatus"></div>
+
+        <div id="productDetail"></div>
+
+        <h2 class="section-title">
+            Inventory Availability
+        </h2>
+
+        <div id="inventoryContainer"></div>
+
+        <h2 class="section-title">
+            Similar Products
+        </h2>
+
+        <div
+            id="recommendationContainer"
+            class="products">
+        </div>
+
+        <h2 class="section-title">
+            Frequently Bought Together
+        </h2>
+
+        <div
+            id="complementaryContainer"
+            class="products">
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+
+    const productContainer =
+        document.getElementById("productContainer");
+
+    const statusContainer =
+        document.getElementById("status");
+
+    const searchInfo =
+        document.getElementById("searchInfo");
+
+
+    // ============================================
+    // INITIAL LOAD
+    // ============================================
+
+    window.onload = function () {
+        loadProducts();
+    };
+
+
+    // Search using Enter key
+    document
+        .getElementById("searchInput")
+        .addEventListener(
+            "keydown",
+            function (event) {
+
+                if (event.key === "Enter") {
+                    searchProducts();
+                }
+            }
+        );
+
+
+    // ============================================
+    // LOAD ALL PRODUCTS
+    // ============================================
+
+    async function loadProducts() {
+
+        showLoading();
+
+        try {
+
+            const response =
+                await fetch("/api/products");
+
+            if (!response.ok) {
+                throw new Error(
+                    "Unable to load products"
+                );
+            }
+
+            const products =
+                await response.json();
+
+            displayProducts(products);
+
+        } catch (error) {
+
+            console.error(error);
+
+            showError(
+                "Products could not be loaded."
+            );
+        }
+    }
+
+
+    // ============================================
+    // INTELLIGENT SEARCH
+    // ============================================
+
+    async function searchProducts() {
+
+        const query =
+            document
+                .getElementById("searchInput")
+                .value
+                .trim();
+
+        if (query === "") {
+
+            searchInfo.innerHTML = "";
+
+            loadProducts();
+
+            return;
+        }
+
+        showLoading();
+
+        try {
+
+            const url =
+                "/api/products/search?query="
+                + encodeURIComponent(query);
+
+            const response =
+                await fetch(url);
+
+            if (!response.ok) {
+                throw new Error(
+                    "Search failed"
+                );
+            }
+
+            const products =
+                await response.json();
+
+            searchInfo.innerHTML =
+                "<strong>Search:</strong> "
+                + escapeHtml(query)
+                + " &nbsp; | &nbsp; "
+                + products.length
+                + " relevant product(s) found";
+
+            displayProducts(products);
+
+        } catch (error) {
+
+            console.error(error);
+
+            showError(
+                "Unable to search products."
+            );
+        }
+    }
+
+
+    // ============================================
+    // DISPLAY PRODUCT CARDS
+    // ============================================
+
+    function displayProducts(products) {
+
+        statusContainer.innerHTML = "";
+
+        productContainer.innerHTML = "";
+
+        if (!products || products.length === 0) {
+
+            productContainer.innerHTML =
+                '<div class="empty-message">'
+                + 'No matching products found.'
+                + '</div>';
+
+            return;
+        }
+
+        products.forEach(product => {
+
+            const card =
+                createProductCard(
+                    product,
+                    "View Details"
+                );
+
+            productContainer.appendChild(card);
+        });
+    }
+
+
+    // ============================================
+    // PRODUCT CARD
+    // ============================================
+
+    function createProductCard(
+        product,
+        buttonText
+    ) {
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "product-card";
+
+        card.innerHTML = `
+
+            <div class="product-icon">
+                🛍️
+            </div>
+
+            <h3>
+                ${escapeHtml(product.name)}
+            </h3>
+
+            <div class="category">
+
+                ${escapeHtml(product.category)}
+
+                •
+
+                ${escapeHtml(
+                    product.subCategory
+                )}
+
+            </div>
+
+            <div class="price">
+
+                ₹${Number(product.price)
+                    .toLocaleString("en-IN")}
+
+            </div>
+
+            <div class="rating">
+
+                ★ ${product.rating}
+
+            </div>
+
+            <p style="margin-bottom:15px;">
+
+                ${escapeHtml(
+                    product.description
+                )}
+
+            </p>
+
+            <button
+                type="button"
+                onclick="viewProduct(${product.id})">
+
+                ${buttonText}
+
+            </button>
+        `;
+
+        return card;
+    }
+
+
+    // ============================================
+    // VIEW PRODUCT DETAILS
+    // ============================================
+
+    async function viewProduct(productId) {
+
+        document.getElementById(
+            "homeSection"
+        ).style.display = "none";
+
+        document.getElementById(
+            "productDetailSection"
+        ).style.display = "block";
+
+        document.getElementById(
+            "detailStatus"
+        ).innerHTML =
+            '<p class="loading">'
+            + 'Loading product details...'
+            + '</p>';
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+        try {
+
+            const [
+                productResponse,
+                inventoryResponse,
+                recommendationResponse,
+                complementaryResponse
+            ] = await Promise.all([
+
+                fetch(
+                    "/api/products/"
+                    + productId
+                ),
+
+                fetch(
+                    "/api/products/"
+                    + productId
+                    + "/inventory"
+                ),
+
+                fetch(
+                    "/api/products/"
+                    + productId
+                    + "/recommendations"
+                ),
+
+                fetch(
+                    "/api/products/"
+                    + productId
+                    + "/complementary"
+                )
+            ]);
+
+
+            if (!productResponse.ok) {
+
+                throw new Error(
+                    "Product could not be loaded."
+                );
+            }
+
+
+            const product =
+                await productResponse.json();
+
+
+            const inventory =
+                inventoryResponse.ok
+                    ? await inventoryResponse.json()
+                    : [];
+
+
+            const recommendations =
+                recommendationResponse.ok
+                    ? await recommendationResponse.json()
+                    : [];
+
+
+            const complementary =
+                complementaryResponse.ok
+                    ? await complementaryResponse.json()
+                    : [];
+
+
+            document.getElementById(
+                "detailStatus"
+            ).innerHTML = "";
+
+
+            showProductDetails(
+                product,
+                inventory
+            );
+
+
+            displayInventory(
+                inventory
+            );
+
+
+            displayRecommendationProducts(
+                recommendations,
+                "recommendationContainer"
+            );
+
+
+            displayRecommendationProducts(
+                complementary,
+                "complementaryContainer"
+            );
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            document.getElementById(
+                "detailStatus"
+            ).innerHTML =
+                '<p class="error">'
+                + 'Unable to load product details.'
+                + '</p>';
+        }
+    }
+
+
+    // ============================================
+    // PRODUCT DETAIL CARD
+    // ============================================
+
+    function showProductDetails(
+        product,
+        inventory
+    ) {
+
+        let size =
+            "Not specified";
+
+        let color =
+            product.color
+            || "Not specified";
+
+
+        if (inventory.length > 0) {
+
+            if (inventory[0].size) {
+                size =
+                    inventory[0].size;
+            }
+
+            if (inventory[0].color) {
+                color =
+                    inventory[0].color;
+            }
+        }
+
+
+        const detailContainer =
+            document.getElementById(
+                "productDetail"
+            );
+
+
+        detailContainer.innerHTML = `
+
+            <div class="detail-card">
+
+                <h1>
+                    ${escapeHtml(product.name)}
+                </h1>
+
+
+                <p style="margin-top:12px;">
+
+                    ${escapeHtml(
+                        product.description
+                    )}
+
+                </p>
+
+
+                <h2 style="
+                    color:#1f4e79;
+                    margin-top:18px;
+                ">
+
+                    ₹${Number(product.price)
+                        .toLocaleString("en-IN")}
+
+                </h2>
+
+
+                <p>
+
+                    <strong>Brand:</strong>
+
+                    ${escapeHtml(product.brand)}
+
+                </p>
+
+
+                <p>
+
+                    <strong>Category:</strong>
+
+                    ${escapeHtml(
+                        product.subCategory
+                    )}
+
+                </p>
+
+
+                <p>
+
+                    <strong>Colour:</strong>
+
+                    ${escapeHtml(color)}
+
+                </p>
+
+
+                <p>
+
+                    <strong>Size:</strong>
+
+                    ${escapeHtml(size)}
+
+                </p>
+
+
+                <p>
+
+                    <strong>Rating:</strong>
+
+                    ★ ${product.rating}
+
+                </p>
+
+
+                <button
+                    type="button"
+                    class="add-cart-btn"
+                    onclick="addToCart(${product.id})">
+
+                    Add to Cart
+
+                </button>
+
+            </div>
+        `;
+    }
+
+
+    // ============================================
+    // INVENTORY
+    // ============================================
+
+    function displayInventory(inventory) {
+
+        const container =
+            document.getElementById(
+                "inventoryContainer"
+            );
+
+
+        if (!inventory ||
+            inventory.length === 0) {
+
+            container.innerHTML =
+                '<div class="empty-message">'
+                + 'No inventory information available.'
+                + '</div>';
+
+            return;
+        }
+
+
+        let html = `
+
+            <table class="inventory-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Location
+                        </th>
+
+                        <th>
+                            Type
+                        </th>
+
+                        <th>
+                            Size
+                        </th>
+
+                        <th>
+                            Quantity
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+        `;
+
+
+        inventory.forEach(item => {
+
+            let cssClass =
+                "available";
+
+
+            if (
+                item.status === "LOW_STOCK"
+            ) {
+
+                cssClass =
+                    "low-stock";
+            }
+
+
+            if (
+                item.status ===
+                "OUT_OF_STOCK"
+            ) {
+
+                cssClass =
+                    "out-of-stock";
+            }
+
+
+            html += `
+
+                <tr>
+
+                    <td>
+                        ${escapeHtml(
+                            item.locationName
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            item.locationType
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            item.size
+                        )}
+                    </td>
+
+                    <td>
+                        ${item.availableQuantity}
+                    </td>
+
+                    <td class="${cssClass}">
+                        ${formatStatus(
+                            item.status
+                        )}
+                    </td>
+
+                </tr>
+            `;
+        });
+
+
+        html += `
+
+                </tbody>
+
+            </table>
+        `;
+
+
+        container.innerHTML =
+            html;
+    }
+
+
+    // ============================================
+    // SIMILAR + COMPLEMENTARY PRODUCTS
+    // ============================================
+
+    function displayRecommendationProducts(
+        products,
+        containerId
+    ) {
+
+        const container =
+            document.getElementById(
+                containerId
+            );
+
+
+        container.innerHTML =
+            "";
+
+
+        if (!products ||
+            products.length === 0) {
+
+            container.innerHTML =
+                '<div class="empty-message">'
+                + 'No recommendations available.'
+                + '</div>';
+
+            return;
+        }
+
+
+        products.forEach(product => {
+
+            const card =
+                createProductCard(
+                    product,
+                    "View Product"
+                );
+
+            container.appendChild(
+                card
+            );
+        });
+    }
+
+
+    // ============================================
+    // BACK TO PRODUCT LIST
+    // ============================================
+
+    function backToProducts() {
+
+        document.getElementById(
+            "productDetailSection"
+        ).style.display =
+            "none";
+
+
+        document.getElementById(
+            "homeSection"
+        ).style.display =
+            "block";
+
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
+
+
+    // ============================================
+    // ADD TO CART
+    // Real cart comes next
+    // ============================================
+
+    function addToCart(productId) {
+
+        alert(
+            "Product added to cart successfully!"
+            + "\nProduct ID: "
+            + productId
+        );
+    }
+
+
+    // ============================================
+    // UI HELPERS
+    // ============================================
+
+    function showLoading() {
+
+        productContainer.innerHTML =
+            "";
+
+        statusContainer.innerHTML =
+            '<p class="loading">'
+            + 'Loading...'
+            + '</p>';
+    }
+
+
+    function showError(message) {
+
+        statusContainer.innerHTML =
+            '<p class="error">'
+            + escapeHtml(message)
+            + '</p>';
+    }
+
+
+    function formatStatus(status) {
+
+        if (status === "LOW_STOCK") {
+            return "LOW STOCK";
+        }
+
+        if (status === "OUT_OF_STOCK") {
+            return "OUT OF STOCK";
+        }
+
+        return "AVAILABLE";
+    }
+
+
+    function escapeHtml(value) {
+
+        if (
+            value === null ||
+            value === undefined
+        ) {
+
+            return "";
+        }
+
+
+        const div =
+            document.createElement("div");
+
+
+        div.textContent =
+            String(value);
+
+
+        return div.innerHTML;
+    }
+
+</script>
+
+</body>
+
+</html>
