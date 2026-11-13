@@ -1,1136 +1,653 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RetailIQ - Intelligent Shopping Assistant</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f7fb;
-            color: #222;
-        }
-
-        header {
-            background: #1f4e79;
-            color: white;
-            padding: 18px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        header h1 {
-            font-size: 25px;
-        }
-
-        header p {
-            font-size: 14px;
-            margin-top: 3px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 35px 20px;
-        }
-
-        .hero {
-            text-align: center;
-            margin-bottom: 35px;
-        }
-
-        .hero h2 {
-            font-size: 30px;
-            margin-bottom: 10px;
-        }
-
-        .hero p {
-            color: #666;
-        }
-
-        .search-box {
-            display: flex;
-            max-width: 750px;
-            margin: 25px auto;
-        }
-
-        .search-box input {
-            flex: 1;
-            padding: 15px;
-            border: 1px solid #bbb;
-            border-radius: 8px 0 0 8px;
-            font-size: 16px;
-        }
-
-        .search-box button {
-            padding: 15px 25px;
-            border: none;
-            background: #1f4e79;
-            color: white;
-            border-radius: 0 8px 8px 0;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .search-box button:hover {
-            background: #163a5c;
-        }
-
-        #searchInfo {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #555;
-        }
-
-        .products {
-            display: grid;
-            grid-template-columns:
-                repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-        }
-
-        .product-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-
-        .product-icon {
-            height: 100px;
-            background: #edf3f8;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 45px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .product-card h3 {
-            margin-bottom: 8px;
-        }
-
-        .category {
-            color: #777;
-            font-size: 14px;
-        }
-
-        .price {
-            font-size: 21px;
-            font-weight: bold;
-            margin: 12px 0;
-            color: #1f4e79;
-        }
-
-        .rating {
-            color: #e67e22;
-            margin-bottom: 10px;
-        }
-
-        .product-card button {
-            width: 100%;
-            background: #1f4e79;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        .detail-card {
-            background: white;
-            padding: 28px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-
-        .detail-card p {
-            margin-top: 8px;
-        }
-
-        .inventory-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            background: white;
-        }
-
-        .inventory-table th,
-        .inventory-table td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-            text-align: left;
-        }
-
-        .inventory-table th {
-            background: #1f4e79;
-            color: white;
-        }
-
-        .available {
-            color: #198754;
-            font-weight: bold;
-        }
-
-        .low-stock {
-            color: #e67e22;
-            font-weight: bold;
-        }
-
-        .out-of-stock {
-            color: #c0392b;
-            font-weight: bold;
-        }
-
-        .add-cart-btn {
-            background: #198754;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            margin-top: 18px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 15px;
-        }
-
-        .back-btn {
-            margin-bottom: 20px;
-            padding: 10px 18px;
-            border: none;
-            border-radius: 6px;
-            background: #555;
-            color: white;
-            cursor: pointer;
-        }
-
-        .section-title {
-            margin-top: 32px;
-            margin-bottom: 15px;
-        }
-
-        .error {
-            text-align: center;
-            color: #b00020;
-        }
-
-        .loading {
-            text-align: center;
-            color: #555;
-        }
-
-        .empty-message {
-            padding: 20px;
-            background: white;
-            color: #666;
-            border-radius: 8px;
-            margin-top: 10px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RetailIQ - Intelligent Shopping Assistant</title>
+<style>
+:root{
+  --bg:#f6f7f9;--panel:#fff;--ink:#1d2433;--muted:#6b7385;--line:#e4e7ec;
+  --brand:#2f5bea;--brand-ink:#fff;--ok:#1f9d55;--ok-bg:#e7f6ee;--warn:#b7791f;--warn-bg:#fdf3e1;
+  --bad:#c53030;--bad-bg:#fdecec;--chip:#eef2ff;--radius:10px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+button{font:inherit;cursor:pointer}
+input,select,textarea{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+header{position:sticky;top:0;z-index:20;background:var(--panel);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;padding:10px 24px}
+.logo{font-weight:700;font-size:18px}.logo span{color:var(--brand)}
+nav{display:flex;gap:4px}
+nav button{border:0;background:none;padding:8px 14px;border-radius:8px;color:var(--muted)}
+nav button.active{background:var(--chip);color:var(--brand);font-weight:600}
+.spacer{flex:1}
+.btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 14px}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.btn.small{padding:4px 10px;font-size:12px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+main{max-width:1280px;margin:0 auto;padding:20px 24px 80px}
+.view{display:none}.view.active{display:block}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.grid{display:grid;gap:12px}
+.muted{color:var(--muted)}.small{font-size:12px}
+h2{font-size:18px;margin:0 0 12px}h3{font-size:15px;margin:0 0 10px}
+.chip{display:inline-block;background:var(--chip);color:var(--brand);border-radius:999px;padding:3px 10px;font-size:12px;margin:2px 4px 2px 0;border:0}
+button.chip:hover{filter:brightness(.96)}
+.badge{display:inline-block;border-radius:6px;padding:2px 8px;font-size:11px;font-weight:600}
+.AVAILABLE{background:var(--ok-bg);color:var(--ok)}.LOW_STOCK{background:var(--warn-bg);color:var(--warn)}.OUT_OF_STOCK{background:var(--bad-bg);color:var(--bad)}
+.search{display:flex;gap:8px}.search input{flex:1;font-size:16px;padding:12px 14px}
+.cards{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:14px;cursor:pointer;display:flex;flex-direction:column;gap:6px;transition:box-shadow .15s}
+.card:hover{box-shadow:0 4px 14px rgba(20,30,60,.08)}
+.swatch{width:12px;height:12px;border-radius:50%;display:inline-block;border:1px solid #0002;vertical-align:middle;margin-right:4px}
+.price{font-weight:700;font-size:16px}
+.reasons{font-size:12px;color:var(--muted)}
+.note{background:var(--warn-bg);color:var(--warn);border-radius:8px;padding:8px 12px;font-size:13px;margin-top:8px}
+.info{background:var(--chip);border-radius:8px;padding:10px 12px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:12px}
+tr.click{cursor:pointer}tr.click:hover{background:#f8f9fc}
+.cell{text-align:center;font-weight:600;border-radius:6px}
+.overlay{position:fixed;inset:0;background:#0f172a66;display:none;z-index:40}
+.overlay.open{display:block}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(460px,100%);background:#fff;z-index:50;transform:translateX(100%);transition:transform .2s;display:flex;flex-direction:column}
+.drawer.open{transform:none}
+.drawer .body{overflow:auto;padding:16px;flex:1}
+.drawer .head{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.modal{position:fixed;inset:4% 0 auto 0;margin:0 auto;width:min(1040px,94%);max-height:92%;overflow:auto;background:#fff;border-radius:14px;z-index:50;display:none;padding:22px}
+.modal.open{display:block}
+.close{border:0;background:none;font-size:22px;color:var(--muted)}
+.sizes button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;margin:0 6px 6px 0;position:relative}
+.sizes button.sel{border-color:var(--brand);box-shadow:0 0 0 2px #2f5bea33}
+.sizes button.OUT_OF_STOCK{color:#aaa;text-decoration:line-through;background:#fafafa}
+.sizes button.LOW_STOCK::after{content:"";position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:var(--warn)}
+.two{grid-template-columns:1.25fr 1fr}
+.rec{border:1px solid var(--line);border-radius:8px;padding:10px;cursor:pointer}
+.rec:hover{background:#fafbff}
+.line{display:grid;grid-template-columns:1fr auto;gap:6px;padding:10px 0;border-bottom:1px solid var(--line)}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:8px}
+.qty button{border:0;background:none;width:28px;height:28px}
+.qty span{min-width:22px;text-align:center}
+.eval{font-size:12px;padding:6px 8px;border-radius:6px;margin:4px 0}
+.eval.ok{background:var(--ok-bg)}.eval.no{background:var(--bad-bg)}
+.totals div{display:flex;justify-content:space-between;padding:3px 0}
+.totals .grand{font-weight:700;font-size:16px;border-top:1px solid var(--line);padding-top:8px;margin-top:6px}
+.steps{display:flex;gap:0;margin:14px 0}
+.step{flex:1;text-align:center;position:relative;font-size:12px;color:var(--muted)}
+.step::before{content:"";position:absolute;top:13px;left:-50%;width:100%;height:3px;background:var(--line);z-index:0}
+.step:first-child::before{display:none}
+.step .dot{width:28px;height:28px;border-radius:50%;background:#fff;border:3px solid var(--line);margin:0 auto 6px;position:relative;z-index:1;display:flex;align-items:center;justify-content:center;font-size:12px}
+.step.done{color:var(--ink)}.step.done .dot{background:var(--ok);border-color:var(--ok);color:#fff}
+.step.done::before{background:var(--ok)}
+.step.current .dot{background:var(--brand);border-color:var(--brand);color:#fff}
+.kpis{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:14px;cursor:pointer}
+.kpi:hover{border-color:var(--brand)}
+.kpi .v{font-size:24px;font-weight:700;margin-top:4px}
+.kpi.warn .v{color:var(--warn)}.kpi.bad .v{color:var(--bad)}
+.bar{height:8px;background:var(--chip);border-radius:4px;overflow:hidden}.bar i{display:block;height:100%;background:var(--brand)}
+.mgr{grid-template-columns:1.4fr 1fr}
+.chat{display:flex;flex-direction:column;gap:10px;max-height:640px;overflow:auto}
+.msg{padding:10px 12px;border-radius:10px;max-width:100%}
+.msg.q{background:var(--brand);color:#fff;align-self:flex-end}
+.msg.a{background:#f3f5fa}
+.msg details{margin-top:8px}.msg summary{cursor:pointer;color:var(--brand);font-size:12px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1d2433;color:#fff;padding:10px 16px;border-radius:8px;z-index:90;display:none;max-width:90%}
+@media (max-width:900px){.two,.mgr{grid-template-columns:1fr}}
+</style>
 </head>
-
 <body>
 
 <header>
-
-    <div>
-        <h1>RetailIQ</h1>
-        <p>Intelligent Retail Shopping Assistant</p>
-    </div>
-
-    <div>
-        Customer View
-    </div>
-
+  <div class="logo">Retail<span>IQ</span></div>
+  <nav>
+    <button data-view="shop" class="active">Shop</button>
+    <button data-view="track">Track order</button>
+    <button data-view="manager">Manager</button>
+  </nav>
+  <div class="spacer"></div>
+  <button class="btn" id="cartBtn">🛒 Cart <b id="cartCount">0</b></button>
 </header>
 
-<div class="container">
-
-    <!-- HOME / PRODUCT LIST -->
-
-    <div id="homeSection">
-
-        <section class="hero">
-
-            <h2>Find the right product</h2>
-
-            <p>
-                Search naturally by product,
-                colour, purpose and price.
-            </p>
-
-            <div class="search-box">
-
-                <input
-                    id="searchInput"
-                    type="text"
-                    placeholder="Try: Black running shoes below 5k"
-                >
-
-                <button
-                    type="button"
-                    onclick="searchProducts()">
-                    Search
-                </button>
-
-            </div>
-
-            <div id="searchInfo"></div>
-
-        </section>
-
-        <div id="status"></div>
-
-        <section>
-
-            <h2 style="margin-bottom:20px;">
-                Products
-            </h2>
-
-            <div
-                id="productContainer"
-                class="products">
-            </div>
-
-        </section>
-
+<main>
+  <!-- ======================= SHOP ======================= -->
+  <section id="shop" class="view active">
+    <div class="panel">
+      <form class="search" id="searchForm">
+        <input id="q" placeholder="Try “black running shoes below ₹5,000” or “formal footwear under 4k”" autocomplete="off">
+        <button class="btn primary">Search</button>
+      </form>
+      <div class="row" style="margin-top:10px" id="examples"></div>
+      <div id="understood" style="margin-top:8px"></div>
     </div>
+    <div class="row" style="margin:16px 0 8px;justify-content:space-between">
+      <h2 id="resultTitle" style="margin:0">Catalogue</h2>
+      <span class="muted small" id="resultCount"></span>
+    </div>
+    <div class="grid cards" id="results"></div>
+  </section>
 
+  <!-- ======================= TRACK ======================= -->
+  <section id="track" class="view">
+    <div class="panel">
+      <form class="search" id="trackForm">
+        <input id="orderNo" placeholder="Order number, e.g. RIQ-261113-12345">
+        <button class="btn primary">Track</button>
+      </form>
+    </div>
+    <div id="orderView" style="margin-top:16px"></div>
+  </section>
 
-    <!-- PRODUCT DETAIL SCREEN -->
-
-    <section
-        id="productDetailSection"
-        style="display:none;">
-
-        <button
-            type="button"
-            class="back-btn"
-            onclick="backToProducts()">
-
-            ← Back to Products
-
-        </button>
-
-        <div id="detailStatus"></div>
-
-        <div id="productDetail"></div>
-
-        <h2 class="section-title">
-            Inventory Availability
-        </h2>
-
-        <div id="inventoryContainer"></div>
-
-        <h2 class="section-title">
-            Similar Products
-        </h2>
-
-        <div
-            id="recommendationContainer"
-            class="products">
+  <!-- ======================= MANAGER ======================= -->
+  <section id="manager" class="view">
+    <div class="row" style="justify-content:space-between;margin-bottom:12px">
+      <h2 style="margin:0">Store operations</h2>
+      <button class="btn small" id="refreshDash">↻ Refresh</button>
+    </div>
+    <div class="grid kpis" id="kpis"></div>
+    <div class="grid mgr" style="margin-top:16px">
+      <div class="grid">
+        <div class="panel" id="drill" style="display:none"></div>
+        <div class="grid" style="grid-template-columns:1fr 1fr">
+          <div class="panel"><h3>Top-selling products</h3><div id="topProducts"></div></div>
+          <div class="panel"><h3>Sales by category</h3><div id="byCategory"></div></div>
         </div>
+        <div class="panel"><h3>Needs replenishment</h3><div id="alerts"></div></div>
+        <div class="panel"><h3>Recent orders</h3><div id="recentOrders"></div></div>
+      </div>
+      <div class="panel">
+        <h3>🤖 AI retail assistant</h3>
+        <p class="muted small" style="margin-top:-4px">Answers are computed from live store data; each answer shows its evidence.</p>
+        <div id="suggest" class="row" style="margin-bottom:10px"></div>
+        <div class="chat" id="chat"></div>
+        <form class="search" id="askForm" style="margin-top:10px">
+          <input id="askQ" placeholder="What inventory needs my attention?">
+          <button class="btn primary">Ask</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
 
-        <h2 class="section-title">
-            Frequently Bought Together
-        </h2>
+<!-- product modal -->
+<div class="overlay" id="overlay"></div>
+<div class="modal" id="productModal"></div>
 
-        <div
-            id="complementaryContainer"
-            class="products">
-        </div>
+<!-- cart drawer -->
+<aside class="drawer" id="cartDrawer">
+  <div class="head"><h2 style="margin:0">Your cart</h2><button class="close" data-close>×</button></div>
+  <div class="body" id="cartBody"></div>
+</aside>
 
-    </section>
-
-</div>
-
+<div class="toast" id="toast"></div>
 
 <script>
+/* ============================================================ utilities */
+const $ = s => document.querySelector(s);
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const inr = n => "₹" + Number(n || 0).toLocaleString("en-IN", {maximumFractionDigits: 2});
+const COLORS = {Black:"#111",White:"#fff",Blue:"#2b6cb0",Navy:"#1a2a5a",Brown:"#7b4a24",Grey:"#888",Red:"#c53030",Green:"#2f855a",Beige:"#d9c7a3"};
+const swatch = c => `<span class="swatch" style="background:${COLORS[c] || "#ccc"}"></span>`;
+const badge = s => `<span class="badge ${s}">${({AVAILABLE:"In stock",LOW_STOCK:"Low stock",OUT_OF_STOCK:"Out of stock"})[s] || s}</span>`;
 
-    const productContainer =
-        document.getElementById("productContainer");
+function toast(msg, ms = 3200) {
+  const t = $("#toast"); t.textContent = msg; t.style.display = "block";
+  clearTimeout(toast.h); toast.h = setTimeout(() => t.style.display = "none", ms);
+}
 
-    const statusContainer =
-        document.getElementById("status");
+async function api(path, opts = {}) {
+  const res = await fetch(path, {headers: {"Content-Type": "application/json"}, ...opts,
+    body: opts.body ? JSON.stringify(opts.body) : undefined});
+  const text = await res.text();
+  const data = text ? JSON.parse(text) : null;
+  if (!res.ok) {
+    const msg = (data && (data.detail || data.message)) || res.statusText;
+    const details = data && data.details && data.details.length ? " — " + data.details.join("; ") : "";
+    throw new Error(msg + details);
+  }
+  return data;
+}
 
-    const searchInfo =
-        document.getElementById("searchInfo");
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (e) {} }
+};
 
+const state = {locations: [], promotions: [], customers: [], cart: null, product: null, size: null,
+  locationId: null, previewDelivery: null, checkout: false};
 
-    // ============================================
-    // INITIAL LOAD
-    // ============================================
+/* ============================================================ navigation */
+function show(view) {
+  document.querySelectorAll(".view").forEach(v => v.classList.toggle("active", v.id === view));
+  document.querySelectorAll("nav button").forEach(b => b.classList.toggle("active", b.dataset.view === view));
+  if (view === "manager") loadDashboard();
+}
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => show(b.dataset.view));
 
-    window.onload = function () {
-        loadProducts();
-    };
+function closeAll() {
+  $("#overlay").classList.remove("open");
+  $("#productModal").classList.remove("open");
+  $("#cartDrawer").classList.remove("open");
+}
+$("#overlay").onclick = closeAll;
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeAll(); });
+document.addEventListener("click", e => { if (e.target.matches("[data-close]")) closeAll(); });
 
+/* ============================================================ search */
+const EXAMPLES = ["Black running shoes below ₹5,000", "running shoe black", "black sports shoes",
+  "shoe for running below 5k", "Work shoes black size 9", "Comfortable formal shoe", "Formal footwear under 4k"];
+$("#examples").innerHTML = `<span class="muted small">Try:</span>` +
+  EXAMPLES.map(e => `<button class="chip" data-q="${esc(e)}">${esc(e)}</button>`).join("");
+$("#examples").onclick = e => { if (e.target.dataset.q) { $("#q").value = e.target.dataset.q; search(); } };
+$("#searchForm").onsubmit = e => { e.preventDefault(); search(); };
 
-    // Search using Enter key
-    document
-        .getElementById("searchInput")
-        .addEventListener(
-            "keydown",
-            function (event) {
+let lastSize = null;
+async function search() {
+  const q = $("#q").value.trim();
+  try {
+    const r = await api("/api/products/search?query=" + encodeURIComponent(q));
+    lastSize = r.intent.size;
+    $("#understood").innerHTML = (r.understood.length
+      ? `<span class="muted small">Understood:</span> ` + r.understood.map(u => `<span class="chip">${esc(u)}</span>`).join("")
+      : "") + r.relaxations.map(x => `<div class="note">${esc(x)}</div>`).join("");
+    $("#resultTitle").textContent = q ? `Results for “${q}”` : "Catalogue";
+    $("#resultCount").textContent = r.count + " products";
+    renderCards(r.results);
+  } catch (e) { toast(e.message); }
+}
 
-                if (event.key === "Enter") {
-                    searchProducts();
-                }
-            }
-        );
+function renderCards(results) {
+  $("#results").innerHTML = results.length ? results.map(r => {
+    const p = r.product;
+    return `<div class="card" data-id="${p.id}">
+      <div class="row" style="justify-content:space-between"><span class="muted small">${esc(p.brand)} · ${esc(p.subCategory)}</span>${badge(p.stockStatus)}</div>
+      <div style="font-weight:600">${esc(p.name)}</div>
+      <div class="row" style="justify-content:space-between"><span class="price">${inr(p.price)}</span>
+        <span class="small">${swatch(p.color)}${esc(p.color)} · ★ ${p.rating}</span></div>
+      ${r.matchReasons.length ? `<div class="reasons">✓ ${r.matchReasons.map(esc).join(" · ")}</div>` : ""}
+    </div>`;
+  }).join("") : `<div class="panel muted">No products found. Try different words.</div>`;
+}
+$("#results").onclick = e => { const c = e.target.closest(".card"); if (c) openProduct(+c.dataset.id, lastSize); };
 
+/* ============================================================ product */
+async function openProduct(id, size, locationId) {
+  state.product = id;
+  state.size = size ?? null;
+  state.locationId = locationId ?? state.locationId ?? (state.locations[0] && state.locations[0].id);
+  await renderProduct();
+  $("#overlay").classList.add("open");
+  $("#productModal").classList.add("open");
+}
 
-    // ============================================
-    // LOAD ALL PRODUCTS
-    // ============================================
+async function renderProduct() {
+  const qs = new URLSearchParams();
+  if (state.size) qs.set("size", state.size);
+  if (state.locationId) qs.set("locationId", state.locationId);
+  let d;
+  try { d = await api(`/api/products/${state.product}/details?` + qs); } catch (e) { return toast(e.message); }
+  state.size = d.selectedSize;
+  const p = d.product;
+  const variant = d.variants.find(v => v.size === d.selectedSize);
+  const locs = d.variants[0] ? d.variants[0].locations : [];
 
-    async function loadProducts() {
+  const matrix = `<table><tr><th>Size</th>${locs.map(l => `<th>${esc(l.locationName.replace(" Store", ""))}</th>`).join("")}<th>Total</th></tr>
+    ${d.variants.map(v => `<tr${v.size === d.selectedSize ? ' style="background:#f3f6ff"' : ""}><td><b>${esc(v.size)}</b></td>
+      ${v.locations.map(l => `<td><span class="badge ${l.status}" title="${l.status}">${l.available}</span></td>`).join("")}
+      <td>${v.totalAvailable}</td></tr>`).join("")}</table>`;
 
-        showLoading();
+  const advice = d.advice;
+  const alts = advice.alternatives.map(a => `<li><a href="#" data-alt='${esc(JSON.stringify(a))}'>${esc(a.label)}</a> — <span class="muted">${esc(a.reason)}</span></li>`).join("");
 
-        try {
+  const recCard = r => `<div class="rec" data-id="${r.product.id}">
+      <div class="row" style="justify-content:space-between"><b>${esc(r.product.name)}</b><span class="price" style="font-size:14px">${inr(r.product.price)}</span></div>
+      <div class="small muted" style="margin:4px 0">${swatch(r.product.color)}${esc(r.product.color)} · ${esc(r.product.subCategory)} ${badge(r.product.stockStatus)}</div>
+      <div class="small">💡 ${esc(r.reason)}</div></div>`;
 
-            const response =
-                await fetch("/api/products");
+  $("#productModal").innerHTML = `
+    <div class="row" style="justify-content:space-between;align-items:flex-start">
+      <div><div class="muted small">${esc(p.category)} › ${esc(p.subCategory)} · ${esc(p.brand)}</div>
+        <h2 style="margin:4px 0">${esc(p.name)}</h2>
+        <div class="row"><span class="price" style="font-size:22px">${inr(p.price)}</span><span>${swatch(p.color)}${esc(p.color)}</span><span>★ ${p.rating}</span>${badge(p.stockStatus)}</div>
+        <p class="muted" style="margin:8px 0 0">${esc(p.description)}</p></div>
+      <button class="close" data-close>×</button>
+    </div>
+    <div class="grid two" style="margin-top:16px">
+      <div>
+        <h3>Choose size</h3>
+        <div class="sizes" id="sizes">${d.variants.map(v => `<button class="${v.status} ${v.size === d.selectedSize ? "sel" : ""}" data-size="${esc(v.size)}" title="${v.totalAvailable} available">${esc(v.size)}</button>`).join("")}</div>
+        <div class="row" style="margin:10px 0">
+          <label class="small muted">Preferred store / location</label>
+          <select id="locSel">${state.locations.map(l => `<option value="${l.id}" ${l.id == state.locationId ? "selected" : ""}>${esc(l.name)}</option>`).join("")}</select>
+        </div>
+        <div class="info"><div class="row" style="justify-content:space-between"><b>${esc(advice.headline)}</b>${badge(advice.status)}</div>
+          ${alts ? `<ul style="margin:8px 0 0;padding-left:18px">${alts}</ul>` : ""}</div>
+        <div class="row" style="margin-top:12px">
+          <div class="qty"><button id="qMinus">−</button><span id="qVal">1</span><button id="qPlus">+</button></div>
+          <button class="btn primary" id="addCart" ${!variant || variant.totalAvailable === 0 ? "disabled" : ""}>
+            ${!variant ? "Select a size" : variant.totalAvailable === 0 ? "Out of stock" : "Add to cart"}</button>
+        </div>
+        <h3 style="margin-top:20px">Stock by location</h3>${matrix}
+      </div>
+      <div>
+        <h3>Similar products</h3><div class="grid">${d.similar.map(recCard).join("") || '<span class="muted">None</span>'}</div>
+        <h3 style="margin-top:18px">Goes well with</h3><div class="grid">${d.complementary.map(recCard).join("") || '<span class="muted">None</span>'}</div>
+      </div>
+    </div>`;
 
-            if (!response.ok) {
-                throw new Error(
-                    "Unable to load products"
-                );
-            }
+  let qty = 1;
+  $("#qMinus").onclick = () => { qty = Math.max(1, qty - 1); $("#qVal").textContent = qty; };
+  $("#qPlus").onclick = () => { qty = Math.min(10, qty + 1); $("#qVal").textContent = qty; };
+  $("#sizes").onclick = e => { if (e.target.dataset.size) { state.size = e.target.dataset.size; renderProduct(); } };
+  $("#locSel").onchange = e => { state.locationId = +e.target.value; renderProduct(); };
+  $("#productModal").querySelectorAll(".rec").forEach(el => el.onclick = () => openProduct(+el.dataset.id, state.size));
+  $("#productModal").querySelectorAll("[data-alt]").forEach(el => el.onclick = ev => {
+    ev.preventDefault();
+    const a = JSON.parse(el.dataset.alt);
+    if (a.type === "LOCATION") { state.locationId = a.locationId; renderProduct(); }
+    else if (a.type === "SIZE") { const v = d.variants.find(x => x.variantId === a.variantId); state.size = v.size; renderProduct(); }
+    else if (a.type === "PRODUCT") openProduct(a.productId, state.size);
+  });
+  if (variant) $("#addCart").onclick = () => addToCart(variant.variantId, qty);
+}
 
-            const products =
-                await response.json();
+/* ============================================================ cart */
+async function ensureCart() {
+  const id = store.get("riq.cart");
+  if (id) {
+    try {
+      const c = await api(`/api/carts/${id}`);
+      if (c.status === "ACTIVE") return c;
+    } catch (e) { /* fall through */ }
+  }
+  const c = await api("/api/carts", {method: "POST"});
+  store.set("riq.cart", c.cartId);
+  return c;
+}
 
-            displayProducts(products);
+function setCart(c) {
+  state.cart = c;
+  $("#cartCount").textContent = c.itemCount;
+  if ($("#cartDrawer").classList.contains("open")) renderCart();
+}
 
-        } catch (error) {
+async function addToCart(variantId, quantity) {
+  try {
+    const c = await ensureCart();
+    setCart(await api(`/api/carts/${c.cartId}/items`, {method: "POST", body: {variantId, quantity}}));
+    toast("Added to cart");
+    closeAll(); openCart();
+  } catch (e) { toast(e.message); }
+}
 
-            console.error(error);
+async function openCart() {
+  try { setCart(await ensureCart()); } catch (e) { return toast(e.message); }
+  state.checkout = false;
+  await renderCart();
+  $("#overlay").classList.add("open");
+  $("#cartDrawer").classList.add("open");
+}
+$("#cartBtn").onclick = openCart;
 
-            showError(
-                "Products could not be loaded."
-            );
-        }
+async function cartCall(path, method, body) {
+  try { setCart(await api(`/api/carts/${state.cart.cartId}${path}`, {method, body})); await renderCart(); }
+  catch (e) { toast(e.message); }
+}
+
+async function renderCart() {
+  let c = state.cart;
+  if (state.previewDelivery && c.items.length) {
+    try { c = await api(`/api/carts/${c.cartId}?deliveryType=${state.previewDelivery}`); } catch (e) {}
+  }
+  const body = $("#cartBody");
+  if (!c.items.length) { body.innerHTML = `<p class="muted">Your cart is empty. Search for a product to get started.</p>`; return; }
+
+  const lines = c.items.map(i => `<div class="line">
+      <div><b>${esc(i.productName)}</b><div class="small muted">${esc(i.brand)} · Size ${esc(i.size)} · ${esc(i.color)} · ${inr(i.unitPrice)} each</div>
+        <div class="row" style="margin-top:6px"><div class="qty"><button data-dec="${i.itemId}" data-q="${i.quantity}">−</button><span>${i.quantity}</span><button data-inc="${i.itemId}" data-q="${i.quantity}">+</button></div>
+        <button class="btn small" data-rm="${i.itemId}">Remove</button></div></div>
+      <div class="price" style="font-size:14px">${inr(i.lineTotal)}</div></div>`).join("");
+
+  const offers = state.promotions.map(p => `<button class="chip" data-apply="${esc(p.code)}" title="${esc(p.description)}">${esc(p.code)}</button>`).join("");
+  const evals = c.promotions.map(e => `<div class="eval ${e.accepted ? "ok" : "no"}">
+      <div class="row" style="justify-content:space-between"><b>${e.accepted ? "✔" : "✘"} ${esc(e.code)}</b>
+      <span>${e.accepted ? "−" + inr(e.discount) : "not applied"} <button class="btn small" data-unapply="${esc(e.code)}">×</button></span></div>
+      <div>${esc(e.reason)}</div></div>`).join("");
+
+  body.innerHTML = `${lines}
+    <h3 style="margin-top:16px">Offers</h3>
+    <form class="row" id="promoForm"><input id="promoCode" placeholder="Enter code e.g. RETAIL10" style="flex:1"><button class="btn">Apply</button></form>
+    <div style="margin:6px 0">${offers}</div>${evals}
+    <div class="row" style="margin-top:12px"><span class="small muted">Preview delivery:</span>
+      <select id="prevDel"><option value="">—</option><option value="HOME_DELIVERY" ${state.previewDelivery === "HOME_DELIVERY" ? "selected" : ""}>Home delivery</option>
+      <option value="STORE_PICKUP" ${state.previewDelivery === "STORE_PICKUP" ? "selected" : ""}>Store pickup</option></select></div>
+    <div class="totals" style="margin-top:10px">
+      <div><span>Subtotal (${c.itemCount} items)</span><span>${inr(c.subtotal)}</span></div>
+      <div style="color:var(--ok)"><span>Discount</span><span>−${inr(c.discount)}</span></div>
+      <div><span>Delivery</span><span>${inr(c.deliveryFee)}</span></div>
+      <div class="small muted" style="display:block">${esc(c.deliveryFeeReason)}</div>
+      <div class="grand"><span>Total</span><span>${inr(c.total)}</span></div>
+    </div>
+    <div id="checkoutArea" style="margin-top:14px">${state.checkout ? checkoutForm(c) : `<button class="btn primary" style="width:100%" id="goCheckout">Checkout</button>`}</div>`;
+
+  body.querySelectorAll("[data-inc]").forEach(b => b.onclick = () => cartCall(`/items/${b.dataset.inc}`, "PATCH", {quantity: +b.dataset.q + 1}));
+  body.querySelectorAll("[data-dec]").forEach(b => b.onclick = () => +b.dataset.q > 1
+    ? cartCall(`/items/${b.dataset.dec}`, "PATCH", {quantity: +b.dataset.q - 1}) : cartCall(`/items/${b.dataset.dec}`, "DELETE"));
+  body.querySelectorAll("[data-rm]").forEach(b => b.onclick = () => cartCall(`/items/${b.dataset.rm}`, "DELETE"));
+  body.querySelectorAll("[data-apply]").forEach(b => b.onclick = () => cartCall("/promotions", "POST", {code: b.dataset.apply}));
+  body.querySelectorAll("[data-unapply]").forEach(b => b.onclick = () => cartCall(`/promotions/${encodeURIComponent(b.dataset.unapply)}`, "DELETE"));
+  $("#promoForm").onsubmit = e => { e.preventDefault(); const v = $("#promoCode").value.trim(); if (v) cartCall("/promotions", "POST", {code: v}); };
+  $("#prevDel").onchange = e => { state.previewDelivery = e.target.value || null; renderCart(); };
+  if (state.checkout) bindCheckout(); else $("#goCheckout").onclick = () => { state.checkout = true; state.previewDelivery = state.previewDelivery || "HOME_DELIVERY"; renderCart(); };
+}
+
+/* ============================================================ checkout */
+function checkoutForm(c) {
+  const cust = state.customers[0] || {};
+  const stores = state.locations.filter(l => l.pickupEnabled);
+  const home = state.previewDelivery !== "STORE_PICKUP";
+  return `<div class="panel" style="padding:12px"><h3>Checkout <span class="muted small">(synthetic customer, no payment)</span></h3>
+    <div class="grid" style="gap:8px">
+      <select id="custSel">${state.customers.map((c, i) => `<option value="${i}">${esc(c.name)} — ${esc(c.city)}</option>`).join("")}</select>
+      <input id="cName" placeholder="Name" value="${esc(cust.name)}">
+      <div class="row"><input id="cEmail" placeholder="Email" value="${esc(cust.email)}" style="flex:1"><input id="cPhone" placeholder="Phone" value="${esc(cust.phone)}" style="width:140px"></div>
+      <div class="row">
+        <label><input type="radio" name="del" value="HOME_DELIVERY" ${home ? "checked" : ""}> Home delivery</label>
+        <label><input type="radio" name="del" value="STORE_PICKUP" ${!home ? "checked" : ""}> Store pickup</label></div>
+      <div id="homeFields" style="display:${home ? "grid" : "none"};gap:8px">
+        <input id="cCity" placeholder="City" value="${esc(cust.city)}"><textarea id="cAddr" rows="2" placeholder="Address">${esc(cust.address)}</textarea></div>
+      <div id="pickupFields" style="display:${home ? "none" : "block"}">
+        <select id="cPickup">${stores.map(l => `<option value="${l.id}">${esc(l.name)}</option>`).join("")}</select></div>
+      <button class="btn primary" id="placeOrder">Place order · ${inr(c.total)}</button>
+    </div></div>`;
+}
+
+function bindCheckout() {
+  $("#custSel").onchange = e => {
+    const c = state.customers[+e.target.value];
+    $("#cName").value = c.name; $("#cEmail").value = c.email; $("#cPhone").value = c.phone;
+    $("#cCity").value = c.city; $("#cAddr").value = c.address;
+  };
+  document.querySelectorAll("input[name=del]").forEach(r => r.onchange = () => { state.previewDelivery = r.value; renderCart(); });
+  $("#placeOrder").onclick = async () => {
+    const deliveryType = document.querySelector("input[name=del]:checked").value;
+    const req = {cartId: state.cart.cartId, customerName: $("#cName").value, customerEmail: $("#cEmail").value,
+      customerPhone: $("#cPhone").value, deliveryType,
+      deliveryCity: deliveryType === "HOME_DELIVERY" ? $("#cCity").value : null,
+      deliveryAddress: deliveryType === "HOME_DELIVERY" ? $("#cAddr").value : null,
+      pickupLocationId: deliveryType === "STORE_PICKUP" ? +$("#cPickup").value : null};
+    $("#placeOrder").disabled = true;
+    try {
+      const o = await api("/api/orders", {method: "POST", body: req});
+      store.set("riq.cart", null);
+      store.set("riq.lastOrder", o.orderNumber);
+      state.cart = null; state.checkout = false; $("#cartCount").textContent = "0";
+      closeAll(); show("track"); $("#orderNo").value = o.orderNumber; renderOrder(o);
+      toast("Order " + o.orderNumber + " placed");
+    } catch (e) { toast(e.message, 6000); $("#placeOrder").disabled = false; }
+  };
+}
+
+/* ============================================================ tracking */
+$("#trackForm").onsubmit = async e => { e.preventDefault(); loadOrder($("#orderNo").value.trim()); };
+async function loadOrder(no) {
+  if (!no) return;
+  try { renderOrder(await api("/api/orders/" + encodeURIComponent(no))); } catch (e) { toast(e.message); }
+}
+
+function renderOrder(o) {
+  const icon = ["📝", "✅", "🧺", "📦", o.deliveryType === "STORE_PICKUP" ? "🏬" : "🚚", "🏠"];
+  const steps = o.status === "CANCELLED" ? `<div class="note">This order was cancelled and its reserved stock released.</div>` :
+    `<div class="steps">${o.journey.map((s, i) => `<div class="step ${s.completed ? "done" : ""} ${s.current ? "current" : ""}">
+       <div class="dot">${s.completed ? "✓" : icon[i]}</div>${esc(s.label)}<div class="small muted">${s.at ? new Date(s.at).toLocaleString("en-IN", {dateStyle: "short", timeStyle: "short"}) : ""}</div></div>`).join("")}</div>`;
+  $("#orderView").innerHTML = `<div class="grid two">
+    <div class="panel">
+      <div class="row" style="justify-content:space-between"><div><div class="muted small">Order number</div><h2 style="margin:0">${esc(o.orderNumber)}</h2></div>
+        <div style="text-align:right"><div class="muted small">Current status</div><b>${esc(o.statusLabel)}</b></div></div>
+      ${steps}
+      <div class="row" style="justify-content:space-between">
+        <span>${o.nextStatusLabel ? `Expected next stage: <b>${esc(o.nextStatusLabel)}</b>` : "Journey complete"} · ${o.deliveryType === "STORE_PICKUP" ? "Pickup" : "Delivery"} by <b>${esc(o.expectedDate)}</b></span>
+        <span class="row">${o.nextStatus ? `<button class="btn primary small" id="advance">Simulate → ${esc(o.nextStatusLabel)}</button>` : ""}
+          ${["PLACED", "CONFIRMED", "PICKING", "PACKED"].includes(o.status) ? `<button class="btn small" id="cancelOrder">Cancel</button>` : ""}</span>
+      </div>
+      <h3 style="margin-top:18px">Items</h3>
+      <table><tr><th>Product</th><th>Size</th><th>Qty</th><th>Fulfilled from</th><th>Amount</th></tr>
+      ${o.items.map(i => `<tr><td>${esc(i.productName)}<div class="small muted">${esc(i.sku)}</div></td><td>${esc(i.size)}</td><td>${i.quantity}</td><td>${esc(i.fulfillmentLocation)}</td><td>${inr(i.lineTotal)}</td></tr>`).join("")}</table>
+      <div class="totals" style="margin-top:10px;max-width:320px;margin-left:auto">
+        <div><span>Subtotal</span><span>${inr(o.subtotal)}</span></div>
+        <div style="color:var(--ok)"><span>Discount ${o.appliedPromotions ? "(" + esc(o.appliedPromotions) + ")" : ""}</span><span>−${inr(o.discount)}</span></div>
+        <div><span>Delivery</span><span>${inr(o.deliveryFee)}</span></div>
+        <div class="grand"><span>Total</span><span>${inr(o.total)}</span></div></div>
+    </div>
+    <div class="panel">
+      <h3>Fulfilment decision</h3>
+      <div class="info"><div class="muted small">Fulfil from</div><b style="font-size:16px">${esc(o.fulfillmentLocation)}</b>
+        <p style="margin:6px 0 0"><b>Reason:</b> ${esc(o.fulfillmentReason)}</p></div>
+      ${o.fulfillmentEvaluation.length ? `<h3 style="margin-top:14px">Locations evaluated</h3><ul style="padding-left:18px;margin:0">${o.fulfillmentEvaluation.map(x => `<li class="small" style="margin:4px 0">${esc(x)}</li>`).join("")}</ul>` : ""}
+      <h3 style="margin-top:14px">Customer</h3>
+      <div class="small">${esc(o.customerName)} · ${esc(o.customerEmail)}<br>${o.deliveryType === "STORE_PICKUP" ? "Pickup at " + esc(o.pickupLocationName) : esc(o.deliveryAddress) + ", " + esc(o.deliveryCity)}</div>
+    </div></div>`;
+  if ($("#advance")) $("#advance").onclick = async () => { try { renderOrder(await api(`/api/orders/${o.orderNumber}/advance`, {method: "POST"})); } catch (e) { toast(e.message); } };
+  if ($("#cancelOrder")) $("#cancelOrder").onclick = async () => { try { renderOrder(await api(`/api/orders/${o.orderNumber}/cancel`, {method: "POST"})); } catch (e) { toast(e.message); } };
+}
+
+/* ============================================================ manager */
+$("#refreshDash").onclick = () => loadDashboard();
+
+async function loadDashboard() {
+  let d;
+  try { d = await api("/api/manager/dashboard"); } catch (e) { return toast(e.message); }
+  const k = (label, value, target, filter, cls = "") =>
+    `<div class="kpi ${cls}" data-target="${target}" data-filter="${filter}"><div class="muted small">${label}</div><div class="v">${value}</div></div>`;
+  $("#kpis").innerHTML =
+    k("Total orders", d.orders.total, "orders", "ALL") +
+    k("Open orders", d.orders.open, "orders", "OPEN") +
+    k("Awaiting fulfilment", d.orders.awaitingFulfillment, "orders", "AWAITING", d.orders.awaitingFulfillment ? "warn" : "") +
+    k("In fulfilment", d.orders.inFulfillment, "orders", "IN_FULFILLMENT") +
+    k("Low-stock items", d.inventory.lowStock, "inventory", "LOW", "warn") +
+    k("Out-of-stock items", d.inventory.outOfStock, "inventory", "OUT", "bad") +
+    k("Need replenishment", d.inventory.needsReplenishment, "inventory", "REPLENISH", "warn") +
+    k("Total sales", inr(d.sales.totalSales), "orders", "ALL") +
+    k("Avg order value", inr(d.sales.averageOrderValue), "orders", "ALL") +
+    k("Units sold", d.sales.unitsSold, "orders", "ALL");
+  $("#kpis").querySelectorAll(".kpi").forEach(el => el.onclick = () => drill(el.dataset.target, el.dataset.filter));
+
+  const maxU = Math.max(1, ...d.sales.topProducts.map(p => p.units));
+  $("#topProducts").innerHTML = d.sales.topProducts.map(p => `<div style="margin:8px 0"><div class="row" style="justify-content:space-between"><span>${esc(p.productName)}</span><span class="small muted">${p.units} units · ${inr(p.revenue)}</span></div>
+     <div class="bar"><i style="width:${p.units / maxU * 100}%"></i></div></div>`).join("");
+  $("#byCategory").innerHTML = d.sales.byCategory.map(c => `<div style="margin:8px 0"><div class="row" style="justify-content:space-between"><span>${esc(c.category)}</span><span class="small muted">${inr(c.revenue)} · ${c.share}%</span></div>
+     <div class="bar"><i style="width:${c.share}%"></i></div></div>`).join("");
+  $("#alerts").innerHTML = alertTable(d.topAlerts, false) + `<button class="btn small" style="margin-top:8px" onclick="drill('inventory','REPLENISH')">View all ${d.inventory.needsReplenishment}</button>`;
+  $("#recentOrders").innerHTML = orderTable(d.recentOrders);
+  bindOrderRows($("#recentOrders"));
+}
+
+function alertTable(rows, withRestock) {
+  if (!rows.length) return `<p class="muted">Nothing here.</p>`;
+  return `<table><tr><th>Product</th><th>Size</th><th>Location</th><th>Avail.</th><th>Sold (recent)</th><th>Cover</th><th>Suggestion</th>${withRestock ? "<th></th>" : ""}</tr>
+    ${rows.map(a => `<tr><td>${esc(a.productName)}<div class="small muted">${esc(a.sku)}</div></td><td>${esc(a.size)}</td><td>${esc(a.locationName)}</td>
+      <td><span class="badge ${a.status}">${a.available}</span></td><td>${a.soldRecently}</td><td>${a.daysOfCover == null ? "—" : a.daysOfCover + "d"}</td>
+      <td class="small">${esc(a.transferSuggestion || (a.suggestedReorderQty ? "Reorder " + a.suggestedReorderQty : ""))}</td>
+      ${withRestock ? `<td><button class="btn small" data-restock="${a.inventoryId}" data-qty="${Math.max(a.suggestedReorderQty, 5)}">+${Math.max(a.suggestedReorderQty, 5)}</button></td>` : ""}</tr>`).join("")}</table>`;
+}
+
+function orderTable(rows) {
+  if (!rows.length) return `<p class="muted">No orders.</p>`;
+  return `<table><tr><th>Order</th><th>Customer</th><th>Status</th><th>Fulfilment</th><th>Items</th><th>Total</th></tr>
+    ${rows.map(o => `<tr class="click" data-order="${esc(o.orderNumber)}"><td>${esc(o.orderNumber)}<div class="small muted">${o.ageHours}h ago</div></td><td>${esc(o.customerName)}</td>
+      <td>${esc(o.statusLabel)}</td><td>${esc(o.fulfillmentLocation)}</td><td>${o.itemCount}</td><td>${inr(o.total)}</td></tr>`).join("")}</table>`;
+}
+
+function bindOrderRows(root) {
+  root.querySelectorAll("[data-order]").forEach(tr => tr.onclick = () => { show("track"); $("#orderNo").value = tr.dataset.order; loadOrder(tr.dataset.order); });
+}
+
+const DRILL_TITLES = {ALL: "All", OPEN: "Open orders", AWAITING: "Orders awaiting fulfilment", IN_FULFILLMENT: "Orders in fulfilment",
+  LOW: "Low-stock items", OUT: "Out-of-stock items", REPLENISH: "Items needing replenishment"};
+
+async function drill(target, filter) {
+  const box = $("#drill");
+  box.style.display = "block";
+  try {
+    if (target === "orders") {
+      const rows = await api("/api/orders?bucket=" + filter);
+      box.innerHTML = `<div class="row" style="justify-content:space-between"><h3>${DRILL_TITLES[filter] || "Orders"} (${rows.length})</h3><button class="close" id="drillClose">×</button></div>` + orderTable(rows.slice(0, 50));
+      bindOrderRows(box);
+    } else {
+      const rows = await api("/api/manager/inventory?filter=" + filter);
+      box.innerHTML = `<div class="row" style="justify-content:space-between"><h3>${DRILL_TITLES[filter]} (${rows.length})</h3><button class="close" id="drillClose">×</button></div>` + alertTable(rows, true);
+      box.querySelectorAll("[data-restock]").forEach(b => b.onclick = async () => {
+        try { await api(`/api/manager/inventory/${b.dataset.restock}/restock`, {method: "POST", body: {quantity: +b.dataset.qty}});
+          toast("Restocked"); await loadDashboard(); drill(target, filter); } catch (e) { toast(e.message); }
+      });
     }
-
-
-    // ============================================
-    // INTELLIGENT SEARCH
-    // ============================================
-
-    async function searchProducts() {
-
-        const query =
-            document
-                .getElementById("searchInput")
-                .value
-                .trim();
-
-        if (query === "") {
-
-            searchInfo.innerHTML = "";
-
-            loadProducts();
-
-            return;
-        }
-
-        showLoading();
-
-        try {
-
-            const url =
-                "/api/products/search?query="
-                + encodeURIComponent(query);
-
-            const response =
-                await fetch(url);
-
-            if (!response.ok) {
-                throw new Error(
-                    "Search failed"
-                );
-            }
-
-            const products =
-                await response.json();
-
-            searchInfo.innerHTML =
-                "<strong>Search:</strong> "
-                + escapeHtml(query)
-                + " &nbsp; | &nbsp; "
-                + products.length
-                + " relevant product(s) found";
-
-            displayProducts(products);
-
-        } catch (error) {
-
-            console.error(error);
-
-            showError(
-                "Unable to search products."
-            );
-        }
-    }
-
-
-    // ============================================
-    // DISPLAY PRODUCT CARDS
-    // ============================================
-
-    function displayProducts(products) {
-
-        statusContainer.innerHTML = "";
-
-        productContainer.innerHTML = "";
-
-        if (!products || products.length === 0) {
-
-            productContainer.innerHTML =
-                '<div class="empty-message">'
-                + 'No matching products found.'
-                + '</div>';
-
-            return;
-        }
-
-        products.forEach(product => {
-
-            const card =
-                createProductCard(
-                    product,
-                    "View Details"
-                );
-
-            productContainer.appendChild(card);
-        });
-    }
-
-
-    // ============================================
-    // PRODUCT CARD
-    // ============================================
-
-    function createProductCard(
-        product,
-        buttonText
-    ) {
-
-        const card =
-            document.createElement("div");
-
-        card.className =
-            "product-card";
-
-        card.innerHTML = `
-
-            <div class="product-icon">
-                🛍️
-            </div>
-
-            <h3>
-                ${escapeHtml(product.name)}
-            </h3>
-
-            <div class="category">
-
-                ${escapeHtml(product.category)}
-
-                •
-
-                ${escapeHtml(
-                    product.subCategory
-                )}
-
-            </div>
-
-            <div class="price">
-
-                ₹${Number(product.price)
-                    .toLocaleString("en-IN")}
-
-            </div>
-
-            <div class="rating">
-
-                ★ ${product.rating}
-
-            </div>
-
-            <p style="margin-bottom:15px;">
-
-                ${escapeHtml(
-                    product.description
-                )}
-
-            </p>
-
-            <button
-                type="button"
-                onclick="viewProduct(${product.id})">
-
-                ${buttonText}
-
-            </button>
-        `;
-
-        return card;
-    }
-
-
-    // ============================================
-    // VIEW PRODUCT DETAILS
-    // ============================================
-
-    async function viewProduct(productId) {
-
-        document.getElementById(
-            "homeSection"
-        ).style.display = "none";
-
-        document.getElementById(
-            "productDetailSection"
-        ).style.display = "block";
-
-        document.getElementById(
-            "detailStatus"
-        ).innerHTML =
-            '<p class="loading">'
-            + 'Loading product details...'
-            + '</p>';
-
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-
-        try {
-
-            const [
-                productResponse,
-                inventoryResponse,
-                recommendationResponse,
-                complementaryResponse
-            ] = await Promise.all([
-
-                fetch(
-                    "/api/products/"
-                    + productId
-                ),
-
-                fetch(
-                    "/api/products/"
-                    + productId
-                    + "/inventory"
-                ),
-
-                fetch(
-                    "/api/products/"
-                    + productId
-                    + "/recommendations"
-                ),
-
-                fetch(
-                    "/api/products/"
-                    + productId
-                    + "/complementary"
-                )
-            ]);
-
-
-            if (!productResponse.ok) {
-
-                throw new Error(
-                    "Product could not be loaded."
-                );
-            }
-
-
-            const product =
-                await productResponse.json();
-
-
-            const inventory =
-                inventoryResponse.ok
-                    ? await inventoryResponse.json()
-                    : [];
-
-
-            const recommendations =
-                recommendationResponse.ok
-                    ? await recommendationResponse.json()
-                    : [];
-
-
-            const complementary =
-                complementaryResponse.ok
-                    ? await complementaryResponse.json()
-                    : [];
-
-
-            document.getElementById(
-                "detailStatus"
-            ).innerHTML = "";
-
-
-            showProductDetails(
-                product,
-                inventory
-            );
-
-
-            displayInventory(
-                inventory
-            );
-
-
-            displayRecommendationProducts(
-                recommendations,
-                "recommendationContainer"
-            );
-
-
-            displayRecommendationProducts(
-                complementary,
-                "complementaryContainer"
-            );
-
-
-        } catch (error) {
-
-            console.error(error);
-
-            document.getElementById(
-                "detailStatus"
-            ).innerHTML =
-                '<p class="error">'
-                + 'Unable to load product details.'
-                + '</p>';
-        }
-    }
-
-
-    // ============================================
-    // PRODUCT DETAIL CARD
-    // ============================================
-
-    function showProductDetails(
-        product,
-        inventory
-    ) {
-
-        let size =
-            "Not specified";
-
-        let color =
-            product.color
-            || "Not specified";
-
-
-        if (inventory.length > 0) {
-
-            if (inventory[0].size) {
-                size =
-                    inventory[0].size;
-            }
-
-            if (inventory[0].color) {
-                color =
-                    inventory[0].color;
-            }
-        }
-
-
-        const detailContainer =
-            document.getElementById(
-                "productDetail"
-            );
-
-
-        detailContainer.innerHTML = `
-
-            <div class="detail-card">
-
-                <h1>
-                    ${escapeHtml(product.name)}
-                </h1>
-
-
-                <p style="margin-top:12px;">
-
-                    ${escapeHtml(
-                        product.description
-                    )}
-
-                </p>
-
-
-                <h2 style="
-                    color:#1f4e79;
-                    margin-top:18px;
-                ">
-
-                    ₹${Number(product.price)
-                        .toLocaleString("en-IN")}
-
-                </h2>
-
-
-                <p>
-
-                    <strong>Brand:</strong>
-
-                    ${escapeHtml(product.brand)}
-
-                </p>
-
-
-                <p>
-
-                    <strong>Category:</strong>
-
-                    ${escapeHtml(
-                        product.subCategory
-                    )}
-
-                </p>
-
-
-                <p>
-
-                    <strong>Colour:</strong>
-
-                    ${escapeHtml(color)}
-
-                </p>
-
-
-                <p>
-
-                    <strong>Size:</strong>
-
-                    ${escapeHtml(size)}
-
-                </p>
-
-
-                <p>
-
-                    <strong>Rating:</strong>
-
-                    ★ ${product.rating}
-
-                </p>
-
-
-                <button
-                    type="button"
-                    class="add-cart-btn"
-                    onclick="addToCart(${product.id})">
-
-                    Add to Cart
-
-                </button>
-
-            </div>
-        `;
-    }
-
-
-    // ============================================
-    // INVENTORY
-    // ============================================
-
-    function displayInventory(inventory) {
-
-        const container =
-            document.getElementById(
-                "inventoryContainer"
-            );
-
-
-        if (!inventory ||
-            inventory.length === 0) {
-
-            container.innerHTML =
-                '<div class="empty-message">'
-                + 'No inventory information available.'
-                + '</div>';
-
-            return;
-        }
-
-
-        let html = `
-
-            <table class="inventory-table">
-
-                <thead>
-
-                    <tr>
-
-                        <th>
-                            Location
-                        </th>
-
-                        <th>
-                            Type
-                        </th>
-
-                        <th>
-                            Size
-                        </th>
-
-                        <th>
-                            Quantity
-                        </th>
-
-                        <th>
-                            Status
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-        `;
-
-
-        inventory.forEach(item => {
-
-            let cssClass =
-                "available";
-
-
-            if (
-                item.status === "LOW_STOCK"
-            ) {
-
-                cssClass =
-                    "low-stock";
-            }
-
-
-            if (
-                item.status ===
-                "OUT_OF_STOCK"
-            ) {
-
-                cssClass =
-                    "out-of-stock";
-            }
-
-
-            html += `
-
-                <tr>
-
-                    <td>
-                        ${escapeHtml(
-                            item.locationName
-                        )}
-                    </td>
-
-                    <td>
-                        ${escapeHtml(
-                            item.locationType
-                        )}
-                    </td>
-
-                    <td>
-                        ${escapeHtml(
-                            item.size
-                        )}
-                    </td>
-
-                    <td>
-                        ${item.availableQuantity}
-                    </td>
-
-                    <td class="${cssClass}">
-                        ${formatStatus(
-                            item.status
-                        )}
-                    </td>
-
-                </tr>
-            `;
-        });
-
-
-        html += `
-
-                </tbody>
-
-            </table>
-        `;
-
-
-        container.innerHTML =
-            html;
-    }
-
-
-    // ============================================
-    // SIMILAR + COMPLEMENTARY PRODUCTS
-    // ============================================
-
-    function displayRecommendationProducts(
-        products,
-        containerId
-    ) {
-
-        const container =
-            document.getElementById(
-                containerId
-            );
-
-
-        container.innerHTML =
-            "";
-
-
-        if (!products ||
-            products.length === 0) {
-
-            container.innerHTML =
-                '<div class="empty-message">'
-                + 'No recommendations available.'
-                + '</div>';
-
-            return;
-        }
-
-
-        products.forEach(product => {
-
-            const card =
-                createProductCard(
-                    product,
-                    "View Product"
-                );
-
-            container.appendChild(
-                card
-            );
-        });
-    }
-
-
-    // ============================================
-    // BACK TO PRODUCT LIST
-    // ============================================
-
-    function backToProducts() {
-
-        document.getElementById(
-            "productDetailSection"
-        ).style.display =
-            "none";
-
-
-        document.getElementById(
-            "homeSection"
-        ).style.display =
-            "block";
-
-
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-    }
-
-
-    // ============================================
-    // ADD TO CART
-    // Real cart comes next
-    // ============================================
-
-    function addToCart(productId) {
-
-        alert(
-            "Product added to cart successfully!"
-            + "\nProduct ID: "
-            + productId
-        );
-    }
-
-
-    // ============================================
-    // UI HELPERS
-    // ============================================
-
-    function showLoading() {
-
-        productContainer.innerHTML =
-            "";
-
-        statusContainer.innerHTML =
-            '<p class="loading">'
-            + 'Loading...'
-            + '</p>';
-    }
-
-
-    function showError(message) {
-
-        statusContainer.innerHTML =
-            '<p class="error">'
-            + escapeHtml(message)
-            + '</p>';
-    }
-
-
-    function formatStatus(status) {
-
-        if (status === "LOW_STOCK") {
-            return "LOW STOCK";
-        }
-
-        if (status === "OUT_OF_STOCK") {
-            return "OUT OF STOCK";
-        }
-
-        return "AVAILABLE";
-    }
-
-
-    function escapeHtml(value) {
-
-        if (
-            value === null ||
-            value === undefined
-        ) {
-
-            return "";
-        }
-
-
-        const div =
-            document.createElement("div");
-
-
-        div.textContent =
-            String(value);
-
-
-        return div.innerHTML;
-    }
-
+    $("#drillClose").onclick = () => box.style.display = "none";
+    box.scrollIntoView({behavior: "smooth", block: "nearest"});
+  } catch (e) { toast(e.message); }
+}
+
+/* ============================================================ assistant */
+const QUESTIONS = ["What inventory needs my attention?", "Which products are running low?", "What are my top-selling products?",
+  "Show products that are out of stock.", "Which orders are still being fulfilled?", "What should I pay attention to?"];
+$("#suggest").innerHTML = QUESTIONS.map(q => `<button class="chip" data-ask="${esc(q)}">${esc(q)}</button>`).join("");
+$("#suggest").onclick = e => { if (e.target.dataset.ask) ask(e.target.dataset.ask); };
+$("#askForm").onsubmit = e => { e.preventDefault(); const q = $("#askQ").value.trim(); if (q) { ask(q); $("#askQ").value = ""; } };
+
+async function ask(question) {
+  const chat = $("#chat");
+  chat.insertAdjacentHTML("beforeend", `<div class="msg q">${esc(question)}</div>`);
+  const pending = document.createElement("div");
+  pending.className = "msg a muted"; pending.textContent = "Analysing store data…";
+  chat.appendChild(pending); chat.scrollTop = chat.scrollHeight;
+  try {
+    const r = await api("/api/manager/assistant", {method: "POST", body: {question}});
+    pending.className = "msg a";
+    pending.innerHTML = `<div style="white-space:pre-wrap">${esc(r.answer)}</div>
+      <div class="small muted" style="margin-top:6px">Intent: ${esc(r.intent)} · Source: ${esc(r.source)}</div>
+      ${r.drillDowns.map(d => `<button class="btn small" style="margin:6px 6px 0 0" data-dt="${d.target}" data-df="${d.filter}">${esc(d.label)} →</button>`).join("")}
+      ${r.evidence.map(ev => `<details ${ev === r.evidence[0] ? "open" : ""}><summary>Evidence: ${esc(ev.title)} (${ev.rows.length})</summary>
+        <div style="overflow:auto"><table><tr>${ev.columns.map(c => `<th>${esc(c)}</th>`).join("")}</tr>${ev.rows.map(row => `<tr>${row.map(c => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</table></div></details>`).join("")}
+      ${r.followUps.length ? `<div style="margin-top:6px">${r.followUps.map(f => `<button class="chip" data-ask="${esc(f)}">${esc(f)}</button>`).join("")}</div>` : ""}`;
+    pending.querySelectorAll("[data-dt]").forEach(b => b.onclick = () => drill(b.dataset.dt, b.dataset.df));
+    pending.querySelectorAll("[data-ask]").forEach(b => b.onclick = () => ask(b.dataset.ask));
+  } catch (e) { pending.textContent = "Error: " + e.message; }
+  chat.scrollTop = chat.scrollHeight;
+}
+
+/* ============================================================ boot */
+(async function init() {
+  try {
+    [state.locations, state.promotions, state.customers] = await Promise.all([
+      api("/api/locations"), api("/api/promotions"), api("/api/customers/demo")]);
+    state.locationId = state.locations[0] && state.locations[0].id;
+    search();
+    const id = store.get("riq.cart");
+    if (id) api(`/api/carts/${id}`).then(c => c.status === "ACTIVE" ? setCart(c) : store.set("riq.cart", null)).catch(() => store.set("riq.cart", null));
+    const last = store.get("riq.lastOrder");
+    if (last) $("#orderNo").value = last;
+  } catch (e) { toast("Backend not reachable: " + e.message, 8000); }
+})();
 </script>
-
 </body>
-
 </html>
